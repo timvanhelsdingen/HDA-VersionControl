@@ -1,6 +1,8 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My HDA Node</title>
     <style>
         body {
@@ -44,58 +46,51 @@
     <h1>GeoSequence</h1>
 
     <!-- Overview Section -->
-    <h2><b>Overview</b></h2>
+    <h2>Overview</h2>
     <p>This node enables fast instancing of geometry, either from disk or directly within your scene. You can search for geometry files in specified folders on disk to easily instance multiple wedges. It supports loading file sequences in various formats and offers flexible control over start and end points, as well as playback options such as single-play, loop, and ping-pong.</p>
     <p>This tool is compatible with other HDAs, like <strong>tvh RetimeInstances</strong> for adjusting playback speed and <strong>OrientInstances</strong> for setting orientation, along with several others for enhanced functionality. Below, you’ll find quick guidance on each of the instancing options available.</p>
 
+    <!-- Toolset Specific Attributes Section -->
+    <h2>Toolset Specific Attributes</h2>
+    <div class="description-box">
+        <p><strong>tvh_age</strong> - This is the internal age attribute. If another age attribute already exists, this one will be created. You can manipulate this attribute using the <em>RetimeInstances</em> HDA to offset the timing of instances in image sequences.</p>
+        <p><strong>tvh_life</strong> - This is the internal life attribute. If a life attribute already exists, this will inherit the same value. You can set or override it with <em>RetimeInstances</em>. Tools such as <em>ScaleInstances</em> depend on the life attribute for scaling over time.</p>
+        <p><strong>tvh_speed</strong> - This attribute determines the speed at which an instance will play back, manipulating the <strong>tvh_age</strong> attribute to adjust playback speed.</p>
+        <p><strong>tvh_index</strong> - This is the index of the instance. For multiple geometry sequences, <em>index1</em> will be the first, <em>index2</em> the second, etc. Tools like <em>tvh_SplitToGroups</em> can split by index, and tools like <em>ScaleInstances</em> will use the index to manage scaling for each instance.</p>
+    </div>
 
-    <!-- Overview Section -->
-<h2><b>Toolset Specific Attributes</b></h2>
+    <!-- Instancing Options Section -->
+    <h2>Instancing Options</h2>
 
-<div class="description-box">
-    <p><strong>tvh_age</strong> - This is the internal age attribute. If another age attribute already exists, this one will be created. You can manipulate this attribute using the <em>RetimeInstances</em> HDA to offset the timing of instances in image sequences.</p>
-
-    <p><strong>tvh_life</strong> - This is the internal life attribute. If a life attribute already exists, this will inherit the same value. You can set or override it with <em>RetimeInstances</em>. Tools such as <em>ScaleInstances</em> depend on the life attribute for scaling over time.</p>
-
-    <p><strong>tvh_speed</strong> - This attribute determines the speed at which an instance will play back, manipulating the <strong>tvh_age</strong> attribute to adjust playback speed.</p>
-
-    <p><strong>tvh_index</strong> - This is the index of the instance. For multiple geometry sequences, <em>index1</em> will be the first, <em>index2</em> the second, etc. Tools like <em>tvh_SplitToGroups</em> can split by index, and tools like <em>ScaleInstances</em> will use the index to manage scaling for each instance.</p>
-</div>
-
-    
-    
-    <!-- Parameters Section -->
-    <h2><b>Instancing Options</b></h2>
-
-    <!-- Parameter 1 -->
+    <!-- Static from Folder -->
     <div class="description-box">
         <strong>Static from Folder</strong>
         <p>This option allows you to instance any geometry located in a specified folder and its subfolders. It is particularly useful for placing geometry generated through wedging or other batch processes, providing a streamlined and organized approach to asset instancing.</p>
         <p>This method is highly performant, efficiently loading and handling geometry to keep scene performance optimal. You can choose to either output the instances directly or generate points with an <code>instancefile</code> attribute, enabling instancing at render time for further performance benefits.</p>
     </div>
 
-    <!-- Parameter 2 -->
+    <!-- Static from Scene -->
     <div class="description-box">
         <strong>Static from Scene</strong>
         <p>This option enables you to select static geometry directly from within your scene. It’s ideal for instancing stationary assets, such as architectural elements, background props, or any geometry that does not require animation.</p>
         <p>By choosing scene-based geometry, you avoid the need to reference external files, streamlining your workflow when working with fixed elements already available in the scene.</p>
     </div>
 
-    <!-- Parameter 3 -->
+    <!-- Static from File -->
     <div class="description-box">
         <strong>Static from File</strong>
         <p>Instance geometry directly from disk, with the option to output either the geometry itself or just the file paths. This tool provides flexibility by allowing you to pick geometry directly from a specified file path rather than an entire folder, ideal for cases where you need precise control over specific assets.</p>
         <p>Manage resources effectively by choosing between immediate geometry output for visualization or file path output for optimized loading during rendering.</p>
     </div>
 
-    <!-- Parameter 4 -->
+    <!-- Sequence from Disk -->
     <div class="description-box">
         <strong>Sequence from Disk</strong>
         <p>This option enables efficient instancing of disk-based geometry sequences, such as <code>.bgeo</code> or <code>.vdb</code> files. It supports integer frames for fast, reliable instancing (subframe precision is not currently available).</p>
         <p>This method is highly performant, allowing you to instance tens of thousands of geometry pieces with minimal overhead, making it ideal for large-scale scenes. The tool uses <code>tvh_age</code>, <code>tvh_speed</code>, and <code>tvh_life</code> attributes to control the retiming of instances, ensuring smooth playback and timing adjustments. These attributes are automatically generated by the <strong>tvh RetimeInstances</strong> node. If these attributes are not present, the tool defaults to the standard <code>age</code> and <code>life</code> attributes, ensuring compatibility with typical setups.</p>
     </div>
 
-    <!-- Parameter 5 -->
+    <!-- Sequence from Scene -->
     <div class="description-box">
         <strong>Sequence from Scene</strong>
         <p>This option enables instancing of animated geometry directly from an operator path in your scene. Set input and output frames for each operator, and the instancing will follow these frames for playback.</p>
@@ -103,13 +98,11 @@
         <p><strong>Note:</strong> This method may be less performant for large amounts of geometry. For instancing large datasets, consider using the <strong>Sequence from Disk</strong> option for optimal efficiency.</p>
     </div>
 
-    <!-- Parameter 6 -->
+    <!-- Alembic Sequence -->
     <div class="description-box">
         <strong>Alembic Sequence</strong>
         <p>This option supports Alembic files (<code>.abc</code>) as input, making it ideal for instancing large sets of geometry. It includes support for subframe interpolation, allowing you to slow down simulations and control playback precisely using the <code>tvh_age</code>, <code>tvh_life</code>, and <code>tvh_speed</code> attributes. These attributes are generated by the <strong>RetimeInstances</strong> node to enable smooth retiming of animations.</p>
         <p><strong>Note:</strong> While this option is well-suited for complex geometry, it may perform slower than the <strong>Sequence from Disk</strong> option when handling tens of thousands of instances.</p>
     </div>
-
-
 </body>
 </html>
